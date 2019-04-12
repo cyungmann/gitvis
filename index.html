@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Git</title>
+  </head>
+  <body>
+    <script type="text/javascript" src="git.js"></script>
+    <script type="text/javascript">
+    ;(function(window, document, undefined){
+      'use strict';
+
+      git({
+        print: console.warn
+      }).then(gitModule => {
+        gitModule.then(x => console.warn(x));
+        gitModule.callMain(['init', 'foo']);
+
+        git({
+          print: console.warn  
+        }).then(gitModule2 => {
+          var paths = ['/foo'];
+          while (paths.length > 0) {
+            const path = paths.pop();
+            const stat = gitModule.FS.stat(path);
+            const mode = stat.mode;
+            const isDir = gitModule.FS.isDir(mode);
+            if (isDir) {
+              gitModule2.FS.mkdir(path, mode);
+              paths.push(...gitModule.FS.readdir(path).filter(name => ['.', '..'].indexOf(name) < 0).map(name => `${path}/${name}`));
+            } else {
+              gitModule2.FS.create(path, mode);
+              gitModule2.FS.writeFile(path, gitModule.FS.readFile(path));
+            }
+          }
+
+          gitModule2.callMain(['-C', 'foo', 'status']);
+        });
+      });
+
+      
+  })(window, window.document);
+    </script>
+  </body>
+</html>

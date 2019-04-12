@@ -1,2 +1,6 @@
 git.js
-git.wasm
+*.wasm
+*.wast
+*.wasm.map
+*.bc
+.vscode/
