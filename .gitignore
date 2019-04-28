@@ -1,6 +1,9 @@
 git.js
+busybox.js
 *.wasm
 *.wast
 *.wasm.map
 *.bc
 .vscode/
+*~
+*.code-workspace

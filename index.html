@@ -14,14 +14,16 @@
       git({
         print: console.warn
       }).then(gitModule => {
-        gitModule.then(x => console.warn(x));
-        gitModule.callMain(['init', 'foo']);
+        gitModule.FS.mkdir('/foo');
+        gitModule.FS.chdir('/foo');
+
+        gitModule.callMain(['init']);
 
         git({
           print: console.warn  
         }).then(gitModule2 => {
-          var paths = ['/foo'];
-          while (paths.length > 0) {
+          const paths = ['/foo'];
+          do {
             const path = paths.pop();
             const stat = gitModule.FS.stat(path);
             const mode = stat.mode;
@@ -33,9 +35,11 @@
               gitModule2.FS.create(path, mode);
               gitModule2.FS.writeFile(path, gitModule.FS.readFile(path));
             }
-          }
+          } while (paths.length > 0);
 
-          gitModule2.callMain(['-C', 'foo', 'status']);
+          gitModule2.FS.chdir(gitModule.FS.cwd());
+
+          gitModule2.callMain(['status']);
         });
       });
 
