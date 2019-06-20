@@ -4,47 +4,53 @@
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Git</title>
+    <link rel="stylesheet" href="node_modules/xterm/dist/xterm.css" />
   </head>
   <body>
+    <div id="terminal"></div>
+    <script type="text/javascript" src="test.js"></script>
     <script type="text/javascript" src="git.js"></script>
+    <script src="node_modules/xterm/dist/xterm.js"></script>
     <script type="text/javascript">
-    ;(function(window, document, undefined){
-      'use strict';
+      ;(function(window, document, undefined){
+        'use strict';
 
-      git({
-        print: console.warn
-      }).then(gitModule => {
-        gitModule.FS.mkdir('/foo');
-        gitModule.FS.chdir('/foo');
-
-        gitModule.callMain(['init']);
-
-        git({
-          print: console.warn  
-        }).then(gitModule2 => {
-          const paths = ['/foo'];
-          do {
-            const path = paths.pop();
-            const stat = gitModule.FS.stat(path);
-            const mode = stat.mode;
-            const isDir = gitModule.FS.isDir(mode);
-            if (isDir) {
-              gitModule2.FS.mkdir(path, mode);
-              paths.push(...gitModule.FS.readdir(path).filter(name => ['.', '..'].indexOf(name) < 0).map(name => `${path}/${name}`));
-            } else {
-              gitModule2.FS.create(path, mode);
-              gitModule2.FS.writeFile(path, gitModule.FS.readFile(path));
-            }
-          } while (paths.length > 0);
-
-          gitModule2.FS.chdir(gitModule.FS.cwd());
-
-          gitModule2.callMain(['status']);
-        });
-      });
-
+        const term = new Terminal();
+        term.open(document.getElementById('terminal'));
+        term.write('Hello from \x1B[1;3;31mxterm.js\x1B[0m $ ');
       
-  })(window, window.document);
+        git({
+          print: console.warn
+        }).then(gitModule => {
+          gitModule.FS.mkdir('/foo');
+          gitModule.FS.chdir('/foo');
+      
+          gitModule.callMain(['init']);
+      
+          git({
+            print: console.warn  
+          }).then(gitModule2 => {
+            const paths = ['/foo'];
+            do {
+              const path = paths.pop();
+              const stat = gitModule.FS.stat(path);
+              const mode = stat.mode;
+              const isDir = gitModule.FS.isDir(mode);
+              if (isDir) {
+                gitModule2.FS.mkdir(path, mode);
+                paths.push(...gitModule.FS.readdir(path).filter(name => ['.', '..'].indexOf(name) < 0).map(name => `${path}/${name}`));
+              } else {
+                gitModule2.FS.create(path, mode);
+                gitModule2.FS.writeFile(path, gitModule.FS.readFile(path));
+              }
+            } while (paths.length > 0);
+      
+            gitModule2.FS.chdir(gitModule.FS.cwd());
+      
+            gitModule2.callMain(['status']);
+          });
+        });
+      })(window, window.document);
     </script>
   </body>
 </html>

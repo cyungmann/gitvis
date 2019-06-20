@@ -4,3 +4,6 @@
 [submodule "busybox"]
 	path = busybox
 	url = https://github.com/cyungmann/busybox
+[submodule "zlib"]
+	path = zlib
+	url = https://github.com/madler/zlib.git

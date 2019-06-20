@@ -1,0 +1,18 @@
+{
+  "name": "gitvis",
+  "version": "1.0.0",
+  "description": "",
+  "dependencies": {
+    "xterm": "^3.14.2"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cyungmann/gitvis.git"
+  },
+  "author": "Chris Yungmann",
+  "bugs": {
+    "url": "https://github.com/cyungmann/gitvis/issues"
+  },
+  "homepage": "https://github.com/cyungmann/gitvis#readme"
+}

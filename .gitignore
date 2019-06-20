@@ -7,3 +7,4 @@ busybox.js
 .vscode/
 *~
 *.code-workspace
+node_modules/
